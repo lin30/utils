@@ -39,3 +39,4 @@ function scaleNum(num, pos) {
 
     return parseFloat(parts.join(''));
 }
+export default scaleNum
