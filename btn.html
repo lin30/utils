@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <style>
+    * {
+      box-sizing:border-box;
+      padding: 0;
+      margin: 0;
+      -webkit-appearance:none;
+      appearance: none;
+      outline: none;
+    }
+    input { 
+      border: 1px solid;
+    }
+    .btn {
+      border: none;
+      border: 1px solid;
+      width: 100px;
+      /*position: absolute;*/
+      right: 0;
+      top: 0;
+      height: 30px; 
+    }
+    /*.btn::before {
+      position: absolute;
+      top: -20px;
+      bottom: -20px;
+      left: -20px;
+      right: -20px;
+      content: '';
+      color: transparent;
+    }*/
+    input {
+      width: 100%;
+      float: left;
+      margin-right: -100px;
+      height: 30px;
+    }
+    .flex {
+      /*display: flex;*/
+      /*position: relative;*/
+      width: 60%;
+    }
+  </style>
+</head>
+<body>
+  <div style="border: 1px solid;border-bottom:none;">shgkahgkahkg</div>
+  <div class="flex">
+    <input>
+    <button id="" class="btn" onclick="a(event)">btn</button>
+  </div>
+  <div>ghkaghkf</div>
+</body>
+<script>
+  function a(e) {
+    console.log(e.target)
+  }
+  var myBtn=document.getElementById("myBtn");
+  myBtn.onclick = function() {
+    alert('.onclick')
+  }
+  myBtn.onclick = function() {
+    alert('.onclick2')
+  }
+  myBtn.addEventListener("click",function(){
+    alert("hello");
+  });
+  myBtn.addEventListener("click",function(){
+    alert("world");
+  },false);
+
+  Function.prototype.before = function(func) {
+    let origin  = this // 保留原函数的引用
+    return function() {
+       func.apply(this, arguments)
+       return origin.apply(this, arguments)
+    }
+  }
+  Function.prototype.after = function(func) {
+    let origin = this
+    return function() {
+      let ret = origin.apply(this, arguments)
+      func.apply(this, arguments)
+      return ret
+    }
+  }
+</script>
+</html>
