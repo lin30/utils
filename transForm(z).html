@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <style>
+    #container {
+  background: lightgray;
+  width: 200px;
+  height: 200px;
+  /* transform: translateZ(0); */
+}
+#fixed {
+  background: darkgray;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+}
+
+button {
+  margin-top: 30px;
+}
+  </style>
+</head>
+<body>
+  <div id="container">
+  <div id="fixed">This is fixed</div>
+</div>
+
+<button id="foo">Add "transform:translateZ(0)" to container</button>
+<script>
+  document.getElementById('foo').onclick = function(){    
+    document.getElementById('container').style.transform = 'translateZ(0)';
+}
+</script>
+</body>
+</html>
+
+
+
