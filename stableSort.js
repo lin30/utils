@@ -1,6 +1,5 @@
 const compareAll = (...comparisons) => (a, b) =>
     comparisons.reduce((m, f) => { 
-      console.log(m || f(a, b))
       m || f(a, b)
     }, 0);
 
