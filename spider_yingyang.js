@@ -11,6 +11,7 @@ var baseUrl = 'http://db.foodmate.net/yingyang'
 var topLists = []
 var childObj = {}
 var infos = []
+var infosList = []
 app.get('/', function (req, res, next) {
   var url = baseUrl
   fetchText(url).then((txt) => {
@@ -33,7 +34,7 @@ app.get('/', function (req, res, next) {
   })
 
   ep.after('get_second_child_list', 1, function (content) {
-    const mapper = obj => fetchText(obj.href).then(txt => console.log(txt))
+    const mapper = obj => fetchText(obj.href, obj.ind).then(({res, params}) => parseInfo(res, params))
     // Promise-all
     pMap(content[0], mapper, {concurrency: 5}).then(() => {
       ep.emit('get_second_child_info')
@@ -43,12 +44,25 @@ app.get('/', function (req, res, next) {
   ep.after('get_second_child_info', 1, function() {
      const obj = {
       topLists,
-      childObj,
-      infos: []
+      childObj
+      // infosList
     }
+    console.log(infosList)
     res.send(obj)
   })
 })
+
+// 解析营养成分节点
+function parseInfo(text, index) {
+  var $ = cheerio.load(text)
+  $('#rightlist .list').each((ind, ele) => {
+    var obj = {
+      index,
+      info: $(ele).text()
+    }
+    infosList.push(obj)
+  })
+}
 
 // 解析一级节点,获取信息
 function parseText(text) {
@@ -82,7 +96,6 @@ function parseChildText(text) {
     items.push({
       title,
       href,
-      infos: [],
       ind: childInd
     })
     childObj['type_' + ind] = items
@@ -91,7 +104,7 @@ function parseChildText(text) {
 }
 
 // 抓取页面
-function fetchText(url) {
+function fetchText(url, params) {
   return new Promise((resolve) => {
     superagent.get(url)
       .charset('gb2312')
@@ -99,7 +112,16 @@ function fetchText(url) {
         if (err) {
           console.log(err)
         }
-        res && res.text && resolve(res.text)
+        if (res && res.text) {
+          if (params) {
+            resolve({
+              res: res.text,
+              params
+            })
+          } else {
+            resolve(res.text)
+          }
+        }
       })
   })
 }
